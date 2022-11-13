@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> frequencySort(vector<int>& nums) {
+        unordered_map<int,int> cnt;
+        for(int i : nums)
+        {
+            cnt[i]++;
+        }
+        sort(nums.begin(),nums.end(),[&cnt](const int i, const int j){
+            if(cnt[i] != cnt[j])
+            {
+                return cnt[i] < cnt[j];
+            }
+            return i>j;
+        });
+        return nums;
+    }
+};

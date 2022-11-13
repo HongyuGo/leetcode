@@ -1,0 +1,59 @@
+Solution1使用字符串的构造与==符号来检测s2是否为s1的轮转字符串
+class Solution {
+public:
+    bool isFlipedString(string s1, string s2) {
+        int n = s1.size();
+        int n1 = s2.size();
+        string sss(s1.begin(),s1.begin());
+        cout<<sss<<endl;
+        if(n != n1 )return false;
+        if(n == 0 && n1 == 0)return true;
+        for(int i = 0; i<n; i++)
+        {
+            string s_copy(s1.begin(),s1.begin()+i);
+            string s2_copy(s2.end()-i, s2.end());
+            if(s_copy == s2_copy)
+            {
+                string s3_copy(s1.begin() + i, s1.end());
+                string s4_copy(s2.begin() ,s2.end()-i);
+                if(s3_copy == s4_copy)return true;
+            }
+        }
+        return false;
+    }
+};
+
+Solution2 leetcode官方题解1
+class Solution {
+public:
+    bool isFlipedString(string s1, string s2) {
+        int m = s1.size(), n = s2.size();
+        if (m != n) {
+            return false;
+        }
+        if (n == 0) {
+            return true;
+        }
+        for (int i = 0; i < n; i++) {
+            bool flag = true;
+            for (int j = 0; j < n; j++) {
+                if (s1[(i + j) % n] != s2[j]) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+Solution3 leetcode官方题解2，重点掌握
+class Solution {
+public:
+    bool isFlipedString(string s1, string s2) {
+        return s1.size() == s2.size() && (s1 + s1).find(s2) != string::npos;
+    }
+};

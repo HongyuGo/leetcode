@@ -1,0 +1,17 @@
+        int n = s.size();
+        queue<char> store;
+        for(int i = 0; i<n; i++)
+        {
+           if(s[i] != ' ') 
+            store.push(s[i]);
+           else store.push('%'),store.push('2'),store.push('0');
+
+        }
+        string s1;
+        while(!store.empty())
+        {
+            char data = store.front();
+            store.pop();
+            s1.push_back(data);
+        }
+        return s1;

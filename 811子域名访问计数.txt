@@ -1,0 +1,68 @@
+Solution1 自己写的方法，模拟题，模拟过程就好，两个重点，1. string的find函数用法中可以指定开始位置，以及从指定位置开始
+寻找的长度，find函数返回的值位size_t类型，返回值的大小是从0索引开始。2. string的构造函数如果使用迭代器构造的话，范围
+是[first,end)即包含first的值但不包含end的值
+class Solution {
+public:
+    vector<string> subdomainVisits(vector<string>& cpdomains) {
+        unordered_map<string,int> mp;
+        for(auto temp : cpdomains)
+        {
+            int n = temp.size();
+            size_t locnum= temp.find(' ');
+            string ss(temp.begin(), temp.begin() + locnum );
+            string ss1(temp.begin() + locnum + 1, temp.end());
+            int num = stoi(ss);
+            mp[ss1] += num;
+            size_t locnum_last = locnum;
+            locnum = temp.find('.',locnum_last + 1);
+            if(locnum != string::npos){
+                string ss2(temp.begin() + locnum + 1,temp.end());
+                cout<<ss2<<endl;
+                mp[ss2]+=num;
+                locnum_last = locnum;
+            }
+            locnum = temp.find('.',locnum_last+1);
+            if(locnum != string::npos)
+            {
+                string ss3(temp.begin() + locnum + 1,temp.end());
+                cout<<ss3<<endl;
+                mp[ss3] +=num;
+                locnum_last = locnum;
+            }
+        }
+        vector<string> store;
+        for(auto data : mp){
+            string kk(to_string(data.second));
+            kk += ' ';
+            kk += data.first;
+            store.push_back(kk);
+
+        }
+        return store;
+    }
+};
+
+Solution2 使用string的substr函数，从实现上确实比自己写的更加清晰
+class Solution {
+public:
+    vector<string> subdomainVisits(vector<string>& cpdomains) {
+        vector<string> ans;
+        unordered_map<string, int> counts;
+        for (auto &&cpdomain : cpdomains) {
+            int space = cpdomain.find(' ');
+            int count = stoi(cpdomain.substr(0, space));
+            string domain = cpdomain.substr(space + 1);
+            counts[domain] += count;
+            for (int i = 0; i < domain.size(); i++) {
+                if (domain[i] == '.') {
+                    string subdomain = domain.substr(i + 1);
+                    counts[subdomain] += count;
+                }
+            }
+        }
+        for (auto &&[subdomain, count] : counts) {
+            ans.emplace_back(to_string(count) + " " + subdomain);
+        }
+        return ans;
+    }
+};

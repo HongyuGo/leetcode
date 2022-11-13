@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int maximumSwap(int num) {
+        vector<int> value;
+        while(num != 0)
+        {
+            value.push_back(num % 10);//获取一个整数每一位的值
+            num = num/10;
+        }
+        int* idx = new int[value.size()];
+        for(int i = 0, j = 0; i < value.size(); i++)
+        {
+            if(value[i] > value[j])j = i;
+            idx[i] = j;
+        }
+        for(int i = value.size()-1; i>=0 ;i--)
+        {
+            if(value[i] != value[idx[i]])
+            {
+                swap(value[i],value[idx[i]]);
+                break;
+            }
+        }
+        int ans = 0;
+        for(int i = value.size()-1; i >= 0;i--)//通过每一位的值还原整数
+        {
+            ans = ans *10 + value[i];
+        }
+        return ans;
+    }
+};
+
+solution 2
+class Solution {
+public:
+    int maximumSwap(int num) {
+        string s = to_string(num);
+        int n = s.size();
+        int max= n - 1;
+        int idx1 = -1;
+        int idx2 = -1;
+        for(int i = n - 1; i>=0; i--)
+        {
+            if(s[i] > s[max]) 
+                max = i;
+            else if (s[i] < s[max])
+            {
+                idx1 = i;
+                idx2 = max;
+            }
+        }
+        if(idx1 >= 0) {swap(s[idx1],s[idx2]);return stoi(s);}
+        else
+            return num;
+
+    }
+};

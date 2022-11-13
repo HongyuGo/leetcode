@@ -1,0 +1,28 @@
+Solution1 简单的dp问题
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& grid) {
+        int dp[201][201];
+        memset(dp,0,sizeof(int) * (201 * 201));
+        dp[0][0] = grid[0][0];
+        int i, j;
+        for(i = 0 ; i < grid.size(); i++){
+            if(i == 0)j = 1;
+            else j = 0;
+            for(; j < grid[0].size(); j++){
+                int ii = i - 1;
+                int jj = j - 1;
+                if(ii < 0){
+                    dp[i][j] = dp[i][jj] + grid[i][j];
+                }
+                else if(jj < 0){
+                    dp[i][j] = dp[ii][j] + grid[i][j];
+                }
+                else{
+                    dp[i][j] = max(dp[ii][j] + grid[i][j], dp[i][jj] + grid[i][j]);
+                }
+            }
+        }
+        return dp[i - 1][j - 1];
+    }
+};

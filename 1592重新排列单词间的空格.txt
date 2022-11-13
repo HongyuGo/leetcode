@@ -1,0 +1,77 @@
+solution1  :
+      //遍历字符串，统计单词数与空格数，用队列存储单词并加入一个空格作为分隔符，然后按顺序输出
+      int count = 0;
+        int count_word = 0;
+        bool flag = false;
+        queue<char> store;
+        string newtext;
+        for(string::iterator it = text.begin(); it != text.end(); it++)
+        {
+            if(*it == ' ')
+            {
+                count++;
+                if(flag == true)
+                {
+                    flag = false;
+                    count_word++;
+                    store.push(' ');
+                }
+            }    
+            if(*it != ' ')
+            {
+                store.push(*it);
+                flag = true;
+            }
+        }
+        if(flag == true)
+        {
+           count_word++;
+           store.push(' ');
+        }
+        if(count_word == 1)
+        {
+            while(!store.empty())
+            {
+                
+                char data = store.front();
+                store.pop();
+                if(data != ' ')
+                    newtext.push_back(data);
+            }
+            newtext.append(count,' ');
+            return newtext;
+        }
+        int merchant = count / (count_word-1);
+        int remainder = count % (count_word-1);
+
+        while(count_word>0)
+        {
+            char data = store.front();
+            store.pop();
+            if(data != ' ')
+                newtext.push_back(data);
+            else
+            {
+                if(count_word>1)
+                    newtext.append(merchant,' ');
+                count_word--;
+            }
+            
+        }
+        newtext.append(remainder,' ');
+        return newtext;
+
+solution2:
+//利用双指针
+        int n = s.size(),cnt = n,m = 0;
+        for(int i = n - 1, j = n - 1,flag = false; i>=0 ; i--)
+        {
+            if(s[i] != ' ') cnt--,swap(s[i],s[j--]),m += !flag,flag = true;
+            else if(flag) flag = false, --j; 
+        }
+        for(int i = 0, j = 0, a = cnt/max(m-1,1),f = false; i < n; i++)
+        {
+            if(s[i] != ' ')swap(s[i],s[j++]),f = true;
+            else if(f) j = j + a,f = false;
+        }
+        return s;

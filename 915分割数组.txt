@@ -1,0 +1,19 @@
+Solution1 前缀最大值与后缀最小值的应用
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> mi(n + 1,INT_MAX);
+        for(int i = n - 1; i >= 0; i--){
+            mi[i] = min(nums[i],mi[i + 1]);
+        }
+        int maxn = nums[0];
+        for(int i = 1; i < n; i++){
+           maxn = max(maxn, nums[i - 1]);
+           if(maxn <= mi[i]){
+               return i;
+           } 
+        }
+        return -1;
+    }
+};

@@ -1,0 +1,22 @@
+Solution1 单调栈的使用
+class StockSpanner {
+public:
+    StockSpanner() {
+        store.emplace(pair<int,int>(-1,INT_MAX));
+        idx = -1;
+    }
+    
+    int next(int price) {
+        idx++;
+        while(price >= store.top().second){
+            store.pop();
+        }
+        int ret = idx - store.top().first;
+        pair<int,int> data(idx,price);
+        store.emplace(data);
+        return ret;
+    }
+private:
+    stack<pair<int,int>> store;
+    int idx;
+};

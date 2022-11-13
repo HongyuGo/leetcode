@@ -1,0 +1,21 @@
+Solution1 单调栈的使用
+class Solution {
+public:
+    int maxChunksToSorted(vector<int>& arr) {
+        stack<int> st;
+        for(int temp : arr){
+            if(st.empty() || temp > st.top()){
+                st.push(temp);
+            }
+            else{
+                int get = st.top();
+                st.pop();
+                while(!st.empty() && st.top() > temp){
+                    st.pop();
+                }
+                st.push(get);
+            }
+        }
+        return st.size();
+    }
+};

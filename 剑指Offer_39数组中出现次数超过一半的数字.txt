@@ -1,0 +1,64 @@
+Solution1 利用hash表做词频统计
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int n = nums.size();
+        int half = n/2;
+        unordered_map<int,int> pp;
+        for(int i = 0; i < n; i++){
+            pp[nums[i]]++;
+        }
+        for(pair<int, int> temp : pp)
+        {
+            if(temp.second > half)return temp.first;
+        }
+        return 0;
+    }
+};
+Solution2 摩尔投票法，重点掌握方法
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int vote = 0; 
+        int x = 0;
+        for(int num : nums)
+        {
+            if(vote == 0) x = num;
+            vote += x==num?1:-1;     
+        }
+        return x;
+    } 
+};
+Solution3 使用分治的方法，首先确定返回条件就是每个数组中只有一个数时，那么这个数一定时众数，然后开始回溯，从左右
+两个子区间得到的众数放到一个区间中时，需要判断哪个才是唯一的众数，递归完成后，返回的最后的值就是整个数组的众数
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+
+        function<int(int ,int )> dfs = [&](int low, int high) -> int{
+            if(low == high)return nums[low];
+            int mid = low + (high - low)/2; 
+            int leftbound = dfs(low,mid);
+            int rightbound = dfs(mid + 1, high);
+
+            if(count(low,high,nums,leftbound) > (high - low + 1) / 2)
+                return leftbound; 
+            if(count(low,high,nums,rightbound) > (high - low + 1) / 2)
+                return rightbound; 
+            return -1;
+        };
+        return dfs(0,nums.size() - 1);
+    }
+    int count(int low, int high, vector<int>& nums,int target)
+    {
+        int number  = 0;
+        for(int i = low; i<=high; i++)
+        {
+            if(nums[i] == target){
+                number++;
+            }
+        }
+        return number;
+    }
+    
+};

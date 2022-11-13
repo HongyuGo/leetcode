@@ -1,0 +1,39 @@
+Solution1 用map记录nums1词频，对于每一个nums2的数，从nums1中找到大于该数的第一个数，如果没有，则找最小的数，然后删除该节点
+class Solution {
+public:
+    vector<int> advantageCount(vector<int>& nums1, vector<int>& nums2) {
+        map<int,int> pp;
+        vector<int> data;
+        for(int temp : nums1){
+            pp[temp]++;
+        }
+        int count = 0;
+        for(int temp2 : nums2){
+            //cout << temp2 << ' ';
+            map<int,int>::iterator it = pp.upper_bound(temp2);
+            if(it == pp.end()){
+               data.push_back(pp.begin()->first);
+               if(pp.begin()->second > 1){
+                   pp.begin()->second--;
+               }
+               else
+                    pp.erase(pp.begin()); 
+            }
+            else{
+                //cout << pp.begin()->first << ' ';
+                data.push_back(it->first);
+                if(it->second > 1){
+                    it->second--;
+                }
+                else{
+                    //cout << it->first << ' ';
+                    pp.erase(it); 
+                }
+                count++;
+            }
+        }
+        for(int i = 0; i < data.size(); i++)
+            cout << data[i] << ' ';
+        return data;
+    }
+};

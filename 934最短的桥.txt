@@ -1,0 +1,133 @@
+Solution1 两次BFS
+class Solution {
+public:
+    int shortestBridge(vector<vector<int>>& grid) {
+        int row = grid.size(), col = grid[0].size();
+        queue<pair<int,int>> temp;
+        vector<pair<int,int>>island;
+        vector<vector<int>> run{{1,0},{-1,0},{0,1},{0,-1}};
+        for(int i = 0; i < grid.size(); i++){
+            for(int j = 0; j < grid[0].size(); j++){
+                if(grid[i][j] == 1){
+                    grid[i][j] = -1;
+                    temp.emplace(i,j);
+                    while(!temp.empty()){
+                        pair<int,int> data = temp.front();
+                        grid[data.first][data.second] = -1;
+                        temp.pop();
+                        island.emplace_back(data.first,data.second);
+                        for(int k = 0; k < 4; k++){
+                            data.first += run[k][0];
+                            data.second += run[k][1];
+                            if(data.first >= 0 && data.first < col
+                            && data.second >= 0 && data.second <row && 
+                               grid[data.first][data.second] == 1){
+                                    //cout << data.first << ' ' << data.second;
+                                   grid[data.first][data.second] = -1;
+                                   temp.emplace(data.first,data.second);
+                            }
+                            data.first -= run[k][0];
+                            data.second -= run[k][1];
+                        }
+                    }
+                    for(auto data : island){
+                        temp.emplace(data.first,data.second);
+                        //cout << data.first << ' ' << data.second;
+                    }
+                    int step = 0;
+                    while(!temp.empty()){
+                        int len = temp.size();
+                        for(int kk = 0; kk < len; kk++){
+                        pair<int,int> data = temp.front();
+                        temp.pop();
+                        for(int k = 0; k < 4; k++){
+                            data.first += run[k][0];
+                            data.second += run[k][1];
+                            if(data.first >= 0 && data.first < col
+                            && data.second >= 0 && data.second <row 
+                               ){
+                                   if(grid[data.first][data.second] == 0){
+                                    cout << data.first << ' ' << data.second;
+                                   grid[data.first][data.second] = -1;
+                                   temp.emplace(data.first,data.second);
+                                   }
+                                   if(grid[data.first][data.second] == 1){
+                                       return step;
+                                   }
+                            }
+                            data.first -= run[k][0];
+                            data.second -= run[k][1];
+                        }
+                        }
+                        step++;
+                    }
+                }
+            }
+        }
+    return -1;
+    }
+};
+
+Solution2 一次DFS 一次BFS，从运行结果来看，DFS的运行速度与占用内存比BSF要多
+class Solution {
+private:
+    vector<pair<int,int>>island;
+    vector<vector<int>> run{{1,0},{-1,0},{0,1},{0,-1}};
+    int row,col;
+public:
+    void dfs(vector<vector<int>>& dfs_grid,int x, int y){
+        if(x < 0 || x >= row || y < 0 || y >= col || dfs_grid[x][y] != 1)return; 
+        dfs_grid[x][y] = -1;
+        island.emplace_back(x,y);
+        for(int mm = 0; mm < 4; mm++){
+            int xx = x + run[mm][0];
+            int yy = y + run[mm][1];
+            dfs(dfs_grid,xx,yy);
+        }
+    }
+
+    int shortestBridge(vector<vector<int>>& grid) {
+        row = grid.size(); 
+        col = grid[0].size();
+        queue<pair<int,int>> temp;
+        for(int i = 0; i < grid.size(); i++){
+            for(int j = 0; j < grid[0].size(); j++){
+                if(grid[i][j] == 1){
+                    dfs(grid,i,j);
+                    for(auto data : island){
+                        temp.emplace(data.first,data.second);
+                        //cout << data.first << ' ' << data.second;
+                    }
+                    int step = 0;
+                    while(!temp.empty()){
+                        int len = temp.size();
+                        for(int kk = 0; kk < len; kk++){
+                        pair<int,int> data = temp.front();
+                        temp.pop();
+                        for(int k = 0; k < 4; k++){
+                            data.first += run[k][0];
+                            data.second += run[k][1];
+                            if(data.first >= 0 && data.first < col
+                            && data.second >= 0 && data.second <row 
+                               ){
+                                   if(grid[data.first][data.second] == 0){
+                                    cout << data.first << ' ' << data.second;
+                                   grid[data.first][data.second] = -1;
+                                   temp.emplace(data.first,data.second);
+                                   }
+                                   if(grid[data.first][data.second] == 1){
+                                       return step;
+                                   }
+                            }
+                            data.first -= run[k][0];
+                            data.second -= run[k][1];
+                        }
+                        }
+                        step++;
+                    }
+                }
+            }
+        }
+    return -1;
+    }
+};

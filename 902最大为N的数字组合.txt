@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int atMostNGivenDigitSet(vector<string>& digits, int n) {
+        string temp = to_string(n);
+        int length = temp.size();
+        int dp[length];
+        memset(dp,-1,sizeof(int) * length);
+
+        function<int(int, bool, bool)> dfs = [&](int i, bool islimit, bool isnum){
+            if(i == length)return static_cast<int>(isnum);
+            if(!islimit && isnum && dp[i] > 0)return dp[i];
+            int res = 0;
+            if(!isnum){
+               res = dfs(i + 1, false, false);
+            }
+            char c = islimit == true ? temp[i] : '9';
+            for(auto nn : digits){
+                if(nn[0] > c)break;
+                res += dfs(i + 1, islimit&&nn[0] == c, true);
+            }
+            if(!islimit && isnum)dp[i] = res;
+            return res;
+        };
+        return dfs(0,true,false);
+    }
+};

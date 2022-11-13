@@ -1,0 +1,53 @@
+solution1
+           if(root == nullptr)
+            {
+                return nullptr;
+            }
+            if(root->val > high)
+            {
+                return trimBST(root->left,low,high);
+            }
+            else if(root->val < low)
+            {
+                return trimBST(root->right,low,high);
+            }
+            else
+            {
+            root->left = trimBST(root->left,low,high);
+            root->right = trimBST(root->right,low,high);
+            return root;
+            }
+
+solution2
+            if(root == nullptr)
+            {
+                return nullptr;
+            }
+            while(root && (root->val < low || root->val > high) )
+            {
+                if(root->val > high)
+                    root = root->left;
+                else if(root->val < low )
+                    root = root->right;
+                else
+                    root = nullptr;
+            }
+            for(TreeNode * temp = root; temp;)
+            {
+                if(temp->left == nullptr)
+                    temp = temp->left;
+                else if(temp->left->val < low)
+                    temp->left = temp->left->right;
+                else
+                    temp = temp->left;      
+            }
+            for(TreeNode * temp = root; temp;)
+            {
+                if(temp->right == nullptr)
+                    temp = temp->right;
+                else if(temp->right->val > high)
+                    temp->right = temp->right->left;
+                else
+                    temp = temp->right;
+            }
+            return root;

@@ -1,0 +1,32 @@
+solution1
+        vector<int> store;
+        vector<int> store_ni;
+        if(head == nullptr) return store_ni;
+        ListNode* cur = head;
+        while(cur)
+        {
+            store.push_back(cur->val);
+            cur = cur->next;   
+        }
+        for(vector<int>::reverse_iterator it = store.rbegin(); it != store.rend();it++)
+        {
+            store_ni.push_back(*it);
+        }
+        return store_ni;
+
+solution 2
+//重点第二种方案，反转列表，减少内存消耗
+        ListNode* cur = head;
+        ListNode* cur_last = nullptr;
+        while(cur)
+        {
+            ListNode* temp = cur->next;//先记录cur指针的下一个节点
+            cur->next = cur_last;//开始反转，把cur指针的下一个节点赋值为cur_last
+            cur_last = cur;//记录cur指针
+            cur = temp;//把记录的cur指针的下一个节点赋值给cur指针，开始迭代
+        }
+        vector<int>store;
+        while(cur_last)
+            store.push_back(cur_last->val),cur_last = cur_last->next;
+        return store;
+    }
